@@ -1,0 +1,34 @@
+{
+  "name": "bouncer-www",
+  "version": "1.0.0",
+  "description": "bouncer-www ===========",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nodemon": "PORT=3000  nodemon --ext tpl,css,js app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/3rd-party-bouncer/bouncer-www.git"
+  },
+  "keywords": [
+    "frontend",
+    "performance",
+    "3rd-party-scripts"
+  ],
+  "author": "Stefan Judis & Christian Haeringer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3rd-party-bouncer/bouncer-www/issues"
+  },
+  "homepage": "https://github.com/3rd-party-bouncer/bouncer-www",
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "cushion": "^1.6.4",
+    "express": "^4.10.2",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.2.1"
+  }
+}
