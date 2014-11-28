@@ -17,12 +17,12 @@ app.use( bodyParser.urlencoded({ extended: true }) );
 app.set( 'config', config );
 app.set( 'io', io );
 app.set( 'logger', logger );
+app.set( 'bouncers', {} );
 app.set(
   'helper', { renderPage: renderPage }
 );
 
 loadRoutes( app );
-
 
 app.use( express.static( __dirname + '/public', { maxAge : 31536000000 } ) );
 

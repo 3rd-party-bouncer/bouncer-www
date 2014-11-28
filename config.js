@@ -12,5 +12,10 @@ module.exports = {
     port    : 5984,
     username: process.env.COUCHDB_USER,
     password: process.env.COUCHDB_PASSWORD
+  },
+  bouncer: {
+    apiKey   : process.env.API_KEY,
+    location : process.env.LOCATION || '',
+    server   : process.env.SERVER
   }
 };

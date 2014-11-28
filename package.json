@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon": "DEBUG=socketio COUCHDB_USER='bouncer' COUCHDB_PASSWORD='bouncer' PORT=3000  ./node_modules/.bin/nodemon --ext tpl,css,js app.js"
+    "nodemon": "DEBUG=socketio COUCHDB_USER=bouncer COUCHDB_PASSWORD=bouncer API_KEY=fcdfe2328c554db7018fafb793824d00f640c7de SERVER=ec2-54-85-117-81.compute-1.amazonaws.com PORT=3000  ./node_modules/.bin/nodemon --ext tpl,css,js app.js"
   },
   "repository": {
     "type": "git",

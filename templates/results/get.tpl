@@ -7,8 +7,8 @@
   <dt>url</dt>
   <dd><%= url %></dd>
 
-  <dt>whitelist</dt>
-  <dd><%= whitelist %></dd>
+  <dt>allowedDomains</dt>
+  <dd><%= allowedDomains %></dd>
 </dl>
 
 
@@ -16,8 +16,6 @@
 
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>
-
-  var i = 1;
 
   var socket = io.connect('http://localhost:8080');
   socket.on('bouncerData', function (data) {

@@ -32,18 +32,12 @@ module.exports = {
 
 
     var db = cushion.database( 'bouncer' );
-
-    db.info( function( error, info ) {
-      //console.log( 'db.info ',  error || info );
-    });
-
-    db.allDocuments(function(error, info, allDocs) {
-      //console.log( 'db.allDocuments', error || allDocs );
-    });
-
     var doc = db.document( req.param('id') );
 
     doc.load( function( err, b ) {
+      if ( err ){
+        return;
+      }
       //console.log( 'doc.load err', err, 'doc.load b', b.body() );
       var docBody = b.body();
 
@@ -53,7 +47,7 @@ module.exports = {
           { id: req.param('id'),
             foo: docBody.foo,
             url: docBody.url,
-            whitelist: docBody.whitelist,
+            allowedDomains: docBody.allowedDomains,
           }, // templateData
           function (error, page) {
             res.send( page );
