@@ -7,19 +7,34 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory
+<!--         <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="/apple-touch-icon-32.png" sizes="32x32" /> -->
+        <link rel="shortcut icon" href="/favicon.ico?v=1" />
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-        -->
+        <link rel="stylesheet" href="/main.css">
     </head>
     <body>
 
-        <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+        <a href="/">
+          <img alt="3rd Party Bouncer" class="logo" height="100" itemprop="image" src="https://avatars3.githubusercontent.com/u/9380807?v=3&amp;s=200" width="100">
+        </a>
+
+        <h1>
+          3rd-party-bouncer
+        </h1>
+        <h2>
+          Measure the impact of third party scripts the easy way
+        </h2>
 
         <%= content %>
+
+        <footer>
+          <nav>
+            <a href="https://github.com/3rd-party-bouncer">Source</a> |
+            <a href="/about">About</a> |
+            © 2014 party-bouncer.net
+          </nav>
+        </footer>
 <!--
         <script src="//ajax.googleapis.com/ajax/libs/jquery/{{JQUERY_VERSION}}/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-{{JQUERY_VERSION}}.min.js"><\/script>')</script>

@@ -1,6 +1,8 @@
-module.exports = function( req, res ) {
-
-  var renderedPage = req.app.get( 'helper' ).renderPage(
+module.exports = {
+  route: 'about',
+  cllbck: function( req, res ) {
+    console.log('-----> ABOUT');
+    req.app.get( 'helper' ).renderPage(
       req.app.get( 'config' ),
       __filename,
       {}, // templateData
@@ -11,4 +13,5 @@ module.exports = function( req, res ) {
         }
       }
     );
+  }
 };

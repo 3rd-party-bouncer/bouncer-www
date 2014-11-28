@@ -1,6 +1,12 @@
-module.exports = function( req, res ) {
+var logger = require( '../../lib/logger' );
 
-  var renderedPage = req.app.get( 'helper' ).renderPage(
+module.exports = {
+  route: '/',
+  cllbck: function( req, res ) {
+
+    logger.request( 'req' );
+
+    req.app.get( 'helper' ).renderPage(
       req.app.get( 'config' ),
       __filename,
       {}, // templateData
@@ -11,4 +17,5 @@ module.exports = function( req, res ) {
         }
       }
     );
+  }
 };
