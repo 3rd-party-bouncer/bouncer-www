@@ -40,8 +40,9 @@ module.exports = {
 
     // kick off bouncer
     bouncers[ savedDoc._id ] = new Bouncer( options );
-    bouncers[ savedDoc._id ].runner.on( 'evaluated3rdParties', function( p ) {
-        console.log( 'evaluated3rdParties', p );
+    bouncers[ savedDoc._id ].runner.on( 'data', function( p ) {
+        console.log( 'data', p );
+        // save -> couch
     } );
 
     bouncers[ savedDoc._id ].run( function( err ) {
