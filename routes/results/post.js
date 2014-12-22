@@ -21,7 +21,7 @@ module.exports = {
 
 
     var options  = {
-      allowedDomains : req.body.allowedDomains.replace( /\s/, '' ).split( ',' ),
+      allowedDomains : req.body.allowedDomains.trim().split( ',' ),
       key            : config.bouncer.apiKey,
       location       : config.bouncer.location,
       runs           : +req.body.runs,
