@@ -1,4 +1,5 @@
-var Bouncer = require( 'bouncer' );
+var couchLogger = require( '../../lib/logger' ).couch;
+var Bouncer     = require( 'bouncer' );
 
 var cushion = new (require('cushion').Connection)(
                 '127.0.0.1', // host
@@ -11,9 +12,10 @@ module.exports = {
   route : 'results',
   cllbck: function( req, res ) {
 
-  var db  = cushion.database( 'bouncer' );
-  var doc = db.document();
-  var app = req.app;
+  var db      = cushion.database( 'bouncer' );
+  var doc     = db.document();
+  var app     = req.app;
+  var docData = {}
 
   var config   = app.get( 'config' );
   var bouncers = app.get( 'bouncers' );
@@ -31,18 +33,35 @@ module.exports = {
     {
       url            : options.url,
       allowedDomains : options.allowedDomains,
-      runs           : options.runs
+      runs           : options.runs,
+      data           : []
     }
   );
 
-  doc.save(function( err,savedDoc){
+  doc.save(function( err, savedDoc){
     options[ 'log' ] = function( message ) { console.log( savedDoc._id, message ); };
 
     // kick off bouncer
     bouncers[ savedDoc._id ] = new Bouncer( options );
-    bouncers[ savedDoc._id ].runner.on( 'data', function( p ) {
-        console.log( 'data', p );
-        // save -> couch
+    bouncers[ savedDoc._id ].runner.on( 'data', function( runData ) {
+      var data = doc.body( 'data' );
+
+      console.log( '*****************************' );
+      console.log( runData );
+
+      data.push( runData );
+
+      doc.body( 'data', data );
+
+      doc.save( function( err, doc ) {
+        if ( err ) {
+          console.log( 'errorrrrrrr' );
+          return couchLogger( err );
+        }
+
+        console.log( 'successssssss' );
+        couchLogger( doc );
+      } );
     } );
 
     bouncers[ savedDoc._id ].run( function( err ) {
