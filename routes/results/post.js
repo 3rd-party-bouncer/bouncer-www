@@ -11,17 +11,17 @@ module.exports = {
   route : 'results',
   cllbck: function( req, res ) {
 
-    var db      = cushion.database( 'bouncer' );
-    var doc     = db.document();
-    var app     = req.app;
-    var docData = {}
+    var db   = cushion.database( 'bouncer' );
+    var doc  = db.document();
+    var app  = req.app;
+    var io   = app.get( 'io' );
 
     var config   = app.get( 'config' );
     var bouncers = app.get( 'bouncers' );
 
 
     var options  = {
-      allowedDomains : req.body.allowedDomains.replace( /\s/g, '' ).split( ',' ),
+      allowedDomains : req.body.allowedDomains.replace( /\s/, '' ).split( ',' ),
       key            : config.bouncer.apiKey,
       location       : config.bouncer.location,
       runs           : +req.body.runs,
@@ -55,7 +55,6 @@ module.exports = {
           if ( err ) {
             return log( err );
           }
-
           // TODO trigger update for interface!!!
         } );
       } );
@@ -70,6 +69,8 @@ module.exports = {
         console.log( 'Bouncer finished!' );
         console.log( 'bouncers available', bouncers );
       } );
+
+      app.set( 'bouncers', bouncers );
 
       res.redirect( 302, '/results/' + savedDoc._id );
 

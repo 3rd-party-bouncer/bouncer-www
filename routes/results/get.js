@@ -12,14 +12,14 @@ module.exports = {
     var io  = app.get( 'io' );
     var log = app.get( 'logger' ).socketio;
 
+    var currentBouncer = app.get( 'bouncers' )[ req.param('id') ];
+
     io.on('connection', function (socket) {
       log( '---> on connection' );
-      socket.on('bouncerData', function (data) {
-        log(data);
-        socket.emit('bouncerData', { hello: 'world' });
-      });
 
-      socket.emit('bouncerData', { hello: 'world' });
+      currentBouncer.runner.on( 'data', function(data){
+        socket.emit( 'bouncerData', data );
+      });
 
     });
 
