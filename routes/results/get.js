@@ -18,7 +18,7 @@ module.exports = {
       log( '---> on connection' );
 
       currentBouncer.runner.on( 'data', function(data){
-        socket.emit( 'bouncerData', data );
+        socket.emit( 'bouncerData', { result: data } );
       });
 
     });
