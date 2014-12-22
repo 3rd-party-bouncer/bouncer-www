@@ -1,5 +1,3 @@
-var logger = require( '../../lib/logger' );
-
 var cushion = new (require('cushion').Connection)(
                 '127.0.0.1', // host
                  5984, // port
@@ -14,9 +12,6 @@ module.exports = {
     var io  = app.get( 'io' );
     var log = app.get( 'logger' ).socketio;
 
-
-
-
     io.on('connection', function (socket) {
       log( '---> on connection' );
       socket.on('bouncerData', function (data) {
@@ -28,17 +23,15 @@ module.exports = {
 
     });
 
-
-
-
     var db = cushion.database( 'bouncer' );
     var doc = db.document( req.param('id') );
 
     doc.load( function( err, b ) {
       if ( err ){
+        console.log( err );
         return;
       }
-      //console.log( 'doc.load err', err, 'doc.load b', b.body() );
+
       var docBody = b.body();
 
       app.get( 'helper' ).renderPage(
@@ -49,15 +42,13 @@ module.exports = {
             url: docBody.url,
             allowedDomains: docBody.allowedDomains,
           }, // templateData
-          function (error, page) {
+          function ( error, page ) {
             res.send( page );
             if ( error ) {
               throw error;
             }
           }
         );
-
-
-    });
+    } );
   }
 };
