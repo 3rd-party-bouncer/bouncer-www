@@ -45,7 +45,7 @@ module.exports = {
           app.get( 'config' ),
           __filename,
           { id: req.param('id'),
-            foo: docBody.foo,
+            results: docBody.data,
             url: docBody.url,
             allowedDomains: docBody.allowedDomains,
           }, // templateData
