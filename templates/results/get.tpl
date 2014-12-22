@@ -23,4 +23,8 @@
   </tbody>
 
 </table>
+<% } else { %>
+
+<h2>still processing your data</h2>
+
 <% } %>
