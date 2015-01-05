@@ -15,19 +15,20 @@
     </head>
     <body>
 
-        <a href="/">
-          <img alt="3rd Party Bouncer" class="logo" height="100" itemprop="image" src="https://avatars3.githubusercontent.com/u/9380807?v=3&amp;s=200" width="100">
-        </a>
+        <main>
+            <a href="/">
+              <img alt="3rd Party Bouncer" class="logo" height="100" itemprop="image" src="https://avatars3.githubusercontent.com/u/9380807?v=3&amp;s=200" width="100">
+            </a>
 
-        <h1>
-          3rd-party-bouncer
-        </h1>
-        <h2>
-          Measure the impact of third party scripts the easy way
-        </h2>
+            <h1>
+              3rd-party-bouncer
+            </h1>
+            <h2>
+              Measure the impact of third party scripts the easy way
+            </h2>
 
-        <%= content %>
-
+            <%= content %>
+        </main>
         <footer>
           <nav>
             <a href="https://github.com/3rd-party-bouncer">Source</a> |

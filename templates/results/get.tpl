@@ -1,10 +1,10 @@
-<h1>Results for  <%= id %></h1>
+<h1>Results for <a href="<%= url %>"><%= url %></a> </h1>
 
 <% if ( results.length ) { %>
-<table>
+<table class="resultTable">
   <thead>
     <tr>
-      <th></th>
+      <th>allowed domain</th>
       <% _.forIn( results[0].firstView, function( value, key ) { %>
         <th> <%= key %> </th>
       <%  } ); %>
@@ -14,9 +14,20 @@
   <tbody>
     <% _.each( results, function( run ) { %>
       <tr>
-        <td> <%= run.allowedUrls %> </td>
+        <td> <a href="<%= run.summary %>"><%= run.allowedUrls %> </a> </td>
         <% _.forOwn( run.firstView , function( value, key ) { %>
-           <td> <%= value %>/<%= run.repeatView[ key ] %> </td>
+           <td>
+            <table>
+              <tr>
+                <th>first run</th>
+                <td><%= value %></td>
+              </tr>
+              <tr>
+                <th>repeated</th>
+                <td><%= run.repeatView[ key ] %></td>
+              </tr>
+            </table>
+           </td>
         <% } ); %>
       </tr>
     <% } ); %>
