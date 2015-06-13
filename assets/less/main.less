@@ -1,4 +1,5 @@
 @import "_colors.less";
+@import "_chartist.css";
 
 html {
   height: 100%;
@@ -120,15 +121,31 @@ footer {
   border : .125em solid @red;
 }
 
+.resultGraphs {
+  list-style : none;
+
+  &, > li {
+    margin : 0;
+    padding : 0;
+  }
+
+  > li {
+    display : inline-block;
+    width : 33.3333%;
+  }
+}
+
 .resultTable {
   width: 100%;
+  text-align : center;
+
 
   thead tr {
     background-color: transparent !important;
   }
 
   td {
-    padding: 0 10px 0 0;
+    padding: .25em;
   }
 
   tr:nth-child(odd) {

@@ -40,7 +40,9 @@ module.exports = {
     );
 
     doc.save(function( err, savedDoc){
-      options[ 'log' ] = function( message ) { console.log( savedDoc._id, message ); };
+      options[ 'log' ] = function( message ) {
+        app.get( 'logger' ).bouncer.call( null, savedDoc._id + ' - ' + message );
+      };
 
       // kick off bouncer
       bouncers[ savedDoc._id ] = new Bouncer( options );
@@ -51,43 +53,44 @@ module.exports = {
         data.push( runData );
 
         doc.body( 'data', data );
+        doc.body( 'runsToGo', runData.runsToGo );
+
+        if ( runData.runsToGo === 0 ) {
+          doc.body( 'finished', true );
+        }
 
         doc.save( function( err, doc ) {
           if ( err ) {
-            return log( err );
+            return app.get( 'logger' ).couch( err );
           }
 
-          console.log( 'Saved bouncer run' );
+          app.get( 'logger' ).couch( 'Saved bouncer run' );
+        } );
+      } );
+
+      bouncers[ savedDoc._id ].runner.on( 'error', function( error ) {
+
+        doc.body( 'error', error );
+
+        doc.save( function( err, doc ) {
+          if ( err ) {
+            app.get( 'logger' ).bouncer( err );
+          }
+
+          app.get( 'logger' ).bouncer( 'Faild bouncer' );
+
+          delete bouncers[ savedDoc._id ];
         } );
       } );
 
       bouncers[ savedDoc._id ].run( function( err ) {
         if ( err ) {
-          console.log( err );
-
-          delete bouncers[ savedDoc._id ];
-          console.log( 'Bouncer finished!' );
-          console.log( 'bouncers available', bouncers );
-
-          return;
+          app.get( 'logger' ).bouncer( 'Bouncer error!' );
+          app.get( 'logger' ).bouncer( err );
         }
 
-        // TODO
-        // dirty solution to avoid update conflicts
-        // fix this
-        setTimeout( function() {
-          doc.body( 'finished', true );
-
-          doc.save( function( err, doc ) {
-            if ( err ) {
-              return console.log( err );
-            }
-
-            delete bouncers[ savedDoc._id ];
-            console.log( 'Bouncer finished!' );
-            console.log( 'bouncers available', bouncers );
-          } );
-        }, 500 );
+        delete bouncers[ savedDoc._id ];
+        app.get( 'logger' ).bouncerApp( 'bouncers available', bouncers );
       } );
 
       app.set( 'bouncers', bouncers );
