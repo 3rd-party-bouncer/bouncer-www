@@ -6,8 +6,9 @@ var cushion = new (require('cushion').Connection)(
               );
 
 module.exports = {
-  route : 'results/:id',
+  route : 'results/data/:id',
   cllbck: function( req, res ) {
+
     var app            = req.app;
     var currentBouncer = app.get( 'bouncers' )[ req.params.id ];
 
@@ -16,27 +17,13 @@ module.exports = {
 
     doc.load( function( err, b ) {
       if ( err ){
-        console.log( err );
-        return;
+        return console.log( err );
       }
 
       var docBody = b.body();
 
-      app.get( 'helper' ).renderPage(
-          app.get( 'config' ),
-          __filename,
-          { id: req.param.sid,
-            results: docBody.data,
-            url: docBody.url,
-            allowedDomains: docBody.allowedDomains,
-          }, // templateData
-          function ( error, page ) {
-            res.send( page );
-            if ( error ) {
-              throw error;
-            }
-          }
-        );
+      res.setHeader('Content-Type', 'application/json');
+      res.send( JSON.stringify( docBody ) );
     } );
   }
 };

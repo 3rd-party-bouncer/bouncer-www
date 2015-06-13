@@ -1,21 +1,15 @@
-var express    = require( 'express' );
-var bodyParser = require( 'body-parser' );
-var config     = require( './config' );
-var loadRoutes = require( './lib/loadRoutes.js' );
-var renderPage = require( './lib/renderPage' );
-var logger     = require( './lib/logger' );
-var app        = express();
-
-
-var server = require('http').Server(app);
-var io     = require('socket.io')(server);
-
-server.listen( 8080 );
+var express     = require( 'express' );
+var bodyParser  = require( 'body-parser' );
+var compression = require( 'compression' );
+var config      = require( './config' );
+var loadRoutes  = require( './lib/loadRoutes.js' );
+var renderPage  = require( './lib/renderPage' );
+var logger      = require( './lib/logger' );
+var app         = express();
 
 app.use( bodyParser.urlencoded({ extended: true }) );
 
 app.set( 'config', config );
-app.set( 'io', io );
 app.set( 'logger', logger );
 app.set( 'bouncers', {} );
 app.set(
@@ -24,6 +18,7 @@ app.set(
 
 loadRoutes( app );
 
+app.use( compression() );
 app.use( express.static( __dirname + '/public', { maxAge : 31536000000 } ) );
 
 app.listen( config.port );

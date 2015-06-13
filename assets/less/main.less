@@ -1,3 +1,5 @@
+@import "_colors.less";
+
 html {
   height: 100%;
   box-sizing: border-box;
@@ -18,7 +20,6 @@ body {
 }
 
 main {
-  padding: 20px 20px 100px;
   background-color: #fff;
   overflow: hidden;
 }
@@ -27,10 +28,18 @@ a {
   color: #e51c23;
 }
 
+header {
+  text-align : center;
+
+  padding : 0 0 1em;
+}
+
 h1 {
   font-family: Helvetica, sans-serif;
-  border: 4px solid;
-  padding: 10px;
+  border  : .125em solid;
+  padding : .33333em .66666em;
+  font-size : 1.5em;
+  margin  : 0;
   display: inline-block;
 }
 
@@ -74,17 +83,42 @@ button {
   cursor: pointer;
 }
 
+.container {
+  position : relative;
+  background : @white;
+  padding: 2em 2em 10em;
+
+  text-align : center;
+}
+
 
 /* FOOTER  ********************************************************************/
 footer {
-  padding: 20px;
-  color: #fff;
-  width: 100%;
+  padding: 1em 2em;
+  color: @white;
   background-color: #333;
 }
 
 
 /* RESULT TABLE  **************************************************************/
+
+.result--headline {
+  position : relative;
+
+  padding: .5em;
+
+  margin : -5.5em auto 5em;
+
+  text-align : center;
+
+  z-index : 0;
+
+  width : 25em;
+
+  background : @white;
+
+  border : .125em solid @red;
+}
 
 .resultTable {
   width: 100%;
@@ -121,3 +155,73 @@ footer {
 
 }
 
+/* SPINNER  *******************************************************************/
+.status {
+  position : absolute;
+
+  border  : 4px solid;
+  font-size : 1em;
+  margin  : 0;
+
+  top : 1.999995em;
+  right : 1.999995em;
+
+  &::after {
+    position : absolute;
+    right : .5em;
+
+    display : block;
+
+    content : '';
+  }
+
+
+  &.is-processing {
+    color : @red;
+    border : .125em solid @red;
+    padding : .33333em 2em .33333em .66666em;
+
+    &::after {
+      width  : 1em;
+      height : 1em;
+
+      top : 0.4em;
+
+      border-radius: 50%;
+
+      content : '';
+
+      border: .1em @red dashed;
+
+      box-shadow : inset 0 0 0 .1em @red;
+
+      background-color: transparent;
+
+      animation: spinner 5s linear infinite;
+    }
+  }
+
+  &.is-done {
+    padding : .33333em 1.5em .33333em .66666em;
+
+    border : .125em solid @green;
+    color : @green;
+
+    &::after {
+      top : .3em;
+
+      font-size : 1em;
+      border-radius: 50%;
+
+      box-sizing : border-box;
+
+      content : '✓';
+    }
+  }
+}
+
+
+@keyframes spinner {
+    0% { -webkit-transform:rotate(0deg);}
+    100% { -webkit-transform:rotate(360deg)}
+}

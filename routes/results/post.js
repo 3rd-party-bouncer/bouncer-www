@@ -34,6 +34,7 @@ module.exports = {
         url            : options.url,
         allowedDomains : options.allowedDomains,
         runs           : options.runs,
+        finished       : false,
         data           : []
       }
     );
@@ -55,25 +56,43 @@ module.exports = {
           if ( err ) {
             return log( err );
           }
-          // TODO trigger update for interface!!!
+
+          console.log( 'Saved bouncer run' );
         } );
       } );
 
       bouncers[ savedDoc._id ].run( function( err ) {
         if ( err ) {
           console.log( err );
-          process.exit( 1 );
+
+          delete bouncers[ savedDoc._id ];
+          console.log( 'Bouncer finished!' );
+          console.log( 'bouncers available', bouncers );
+
+          return;
         }
-        // remove bouncer instance from bouncers
-        delete bouncers[ savedDoc._id ];
-        console.log( 'Bouncer finished!' );
-        console.log( 'bouncers available', bouncers );
+
+        // TODO
+        // dirty solution to avoid update conflicts
+        // fix this
+        setTimeout( function() {
+          doc.body( 'finished', true );
+
+          doc.save( function( err, doc ) {
+            if ( err ) {
+              return console.log( err );
+            }
+
+            delete bouncers[ savedDoc._id ];
+            console.log( 'Bouncer finished!' );
+            console.log( 'bouncers available', bouncers );
+          } );
+        }, 500 );
       } );
 
       app.set( 'bouncers', bouncers );
 
       res.redirect( 302, '/results/' + savedDoc._id );
-
     } );
   }
 };

@@ -14,7 +14,11 @@ var concat        = require( 'gulp-concat' ),
 
 var files = {
   //lint    : [ 'app.js', 'gulpfile.js', 'js/**/*.js', 'lib/**/*.js' ],
-  scripts : [],
+  scripts : [
+    'node_modules/whatwg-fetch/fetch.js',
+    'node_modules/nunjucks/browser/nunjucks.js',
+    'assets/scripts/*.js'
+  ],
   styles  : [ 'assets/less/main.less' ],
   watch   : {
     styles : [ 'assets/less/**/*.less' ]
@@ -38,7 +42,7 @@ gulp.task( 'lint', function() {
   return gulp.src( files.lint )
     .pipe( jshint() )
     .pipe( jshint.reporter( jshintStylish ) );
-});
+} );
 
 
 /*******************************************************************************
@@ -58,7 +62,7 @@ gulp.task( 'styles', function () {
     .pipe( prefix( 'last 1 version', '> 1%', 'ie 8', 'ie 7' ) )
     .pipe( minifyCSS() )
     .pipe( gulp.dest( 'public/' ) );
-});
+} );
 
 
 /*******************************************************************************
@@ -68,12 +72,12 @@ gulp.task( 'styles', function () {
  * - uglify the js
  * - and save it to public
  */
-// gulp.task( 'scripts', function() {
-//   return gulp.src( files.scripts )
-//     .pipe( concat( 'tooling.js' ) )
-//     .pipe( uglify() )
-//     .pipe( gulp.dest( 'public' ) );
-// });
+gulp.task( 'scripts', function() {
+  return gulp.src( files.scripts )
+    .pipe( concat( 'results.js' ) )
+    .pipe( uglify() )
+    .pipe( gulp.dest( 'public' ) );
+} );
 
 
 
@@ -97,8 +101,8 @@ gulp.task( 'build', [ 'styles', 'scripts', 'svg' ] );
 gulp.task( 'watch', function() {
   //gulp.watch( files.lint, [ 'lint' ] );
   gulp.watch( files.watch.styles, [ 'styles' ] );
-  //gulp.watch( files.scripts, [ 'scripts' ] );
-});
+  gulp.watch( files.scripts, [ 'scripts' ] );
+} );
 
 
 /*******************************************************************************
