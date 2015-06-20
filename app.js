@@ -29,10 +29,10 @@ MongoClient.connect(
       'helper', { renderPage: renderPage }
     );
 
-    loadRoutes( app );
-
     app.use( compression() );
     app.use( express.static( __dirname + '/public', { maxAge : 31536000000 } ) );
+
+    loadRoutes( app );
 
     console.log( 'listening to port:' + config.port );
     app.listen( config.port );
