@@ -1,5 +1,7 @@
 @import "_colors.less";
-@import "_chartist.css";
+@import "_utils.less";
+@import "components/_form.less";
+@import "components/_graphs.less";
 
 html {
   height: 100%;
@@ -47,7 +49,7 @@ h1 {
 h2 {
   font-weight: normal;
   margin-top: 0;
-  font-size: medium;
+  font-size: 1em;
   color: #e51c23;
 }
 
@@ -69,9 +71,10 @@ dd {
 
 input,
 textarea,
-button {
+button,
+select {
   display: block;
-  width: 600px;
+  width: 100%;
   padding: 1em;
   margin-bottom: 1em;
   background-color: #e7e7e7;
@@ -87,7 +90,7 @@ button {
 .container {
   position : relative;
   background : @white;
-  padding: 2em 2em 10em;
+  padding: 2em;
 
   text-align : center;
 }
@@ -119,20 +122,6 @@ footer {
   background : @white;
 
   border : .125em solid @red;
-}
-
-.resultGraphs {
-  list-style : none;
-
-  &, > li {
-    margin : 0;
-    padding : 0;
-  }
-
-  > li {
-    display : inline-block;
-    width : 33.3333%;
-  }
 }
 
 .resultTable {

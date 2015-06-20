@@ -4,15 +4,6 @@
 <main id="results">
   <table id="resultTable" class="resultTable"></table>
   <ul class="resultGraphs">
-    <li>
-      <h3>Start render</h3>
-      <div id="resultGraph--render" class="graph--container"></div>
-    <li>
-      <h3>Speed Index</h3>
-      <div id="resultGraph--SpeedIndex" class="graph--container"></div>
-    <li>
-      <h3>Number of DOM elements</h3>
-      <div id="resultGraph--domElements" class="graph--container"></div>
   </ul>
 </main>
 
@@ -20,12 +11,11 @@
   <thead>
     <tr>
       <th></th>
-      <th>Allowed Domains</th>
-      <th>Blocked Domains</th>
+      <th>Allowed 3rd Party Domains</th>
       <th>Start Render</th>
       <th>SpeedIndex</th>
       <th>DOM Elements</th>
-      <th>Document complete</th>
+      <th>Document Complete</th>
       <th>Fully Loaded</th>
       <th>Number of Requests</th>
       <th></th>
@@ -37,7 +27,6 @@
       <tr>
         <td>{{ loop.index }}</td>
         <td>{{ date.allowedUrl }}</td>
-        <td>{{ date.blockedUrl }}</td>
         <td>{{ date.response.data.median.firstView.render }}ms | {{ date.response.data.median.repeatView.render }}ms</td>
         <td>{{ date.response.data.median.firstView.SpeedIndex }} | {{ date.response.data.median.repeatView.SpeedIndex }}</td>
         <td>{{ date.response.data.median.firstView.domElements }} | {{ date.response.data.median.repeatView.domElements }}</td>

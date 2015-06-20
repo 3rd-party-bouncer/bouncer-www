@@ -1,0 +1,36 @@
+.form {
+  padding : 2em;
+
+  border-top : .125em solid @black;
+
+  max-width : 40em;
+
+  margin : 2em auto;
+
+  textarea, input, button {
+    font-size   : 1em;
+    font-family : "Courier New",Courier,monospace;
+  }
+}
+
+  .form--label {
+    display : block;
+
+    margin-bottom : 1em;
+
+    &:last-child {
+      margin-bottom : 0;
+    }
+  }
+
+  .form--button {
+
+    background : @green;
+    color      : @white;
+
+    text-align : center;
+
+    &:hover, &:active {
+      background : lighten( @green, 10% );
+    }
+  }

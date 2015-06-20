@@ -17,7 +17,7 @@ var files = {
   scripts : [
     'node_modules/whatwg-fetch/fetch.js',
     'node_modules/nunjucks/browser/nunjucks.js',
-    'node_modules/chartist/dist/chartist.min.js',
+    'node_modules/d3/d3.js',
     'assets/scripts/*.js'
   ],
   styles  : [ 'assets/less/main.less' ],
