@@ -7,7 +7,6 @@ module.exports = {
     var db             = app.get( 'db' );
     var collection     = db.collection( 'documents' );
 
-    var db  = cushion.database( 'bouncer' );
     var doc = db.document( req.params.id );
 
     collection.find( {
