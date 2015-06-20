@@ -1,5 +1,5 @@
 {
-  "name": "bouncer-www",
+  "name": "@3rd-party-bouncer/bouncer-www",
   "version": "1.0.0",
   "description": "bouncer-www ===========",
   "main": "index.js",
