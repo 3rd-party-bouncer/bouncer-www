@@ -1,10 +1,3 @@
-var cushion = new (require('cushion').Connection)(
-                '127.0.0.1', // host
-                 5984, // port
-                process.env.COUCHDB_USER, // username
-                process.env.COUCHDB_PASSWORD // password
-              );
-
 var ObjectID = require( 'mongodb' ).ObjectID;
 
 module.exports = {
