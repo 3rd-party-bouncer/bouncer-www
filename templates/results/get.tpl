@@ -36,8 +36,8 @@
     {% for date in data %}
       <tr>
         <td>{{ loop.index }}</td>
-        <td>{{ date.allowedUrls }}</td>
-        <td>{{ date.blockedUrls }}</td>
+        <td>{{ date.allowedUrl }}</td>
+        <td>{{ date.blockedUrl }}</td>
         <td>{{ date.response.data.median.firstView.render }}ms | {{ date.response.data.median.repeatView.render }}ms</td>
         <td>{{ date.response.data.median.firstView.SpeedIndex }} | {{ date.response.data.median.repeatView.SpeedIndex }}</td>
         <td>{{ date.response.data.median.firstView.domElements }} | {{ date.response.data.median.repeatView.domElements }}</td>

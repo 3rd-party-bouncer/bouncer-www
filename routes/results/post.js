@@ -1,20 +1,12 @@
-var Bouncer     = require( 'bouncer' );
-
-var cushion = new (require('cushion').Connection)(
-                '127.0.0.1', // host
-                 5984, // port
-                 process.env.COUCHDB_USER, // username
-                 process.env.COUCHDB_PASSWORD // password
-              );
+var Bouncer     = require( '@3rd-party-bouncer/bouncer' );
 
 module.exports = {
   route : 'results',
   cllbck: function( req, res ) {
-
-    var db   = cushion.database( 'bouncer' );
-    var doc  = db.document();
-    var app  = req.app;
-    var io   = app.get( 'io' );
+    var app        = req.app;
+    var io         = app.get( 'io' );
+    var db         = app.get( 'db' );
+    var collection = db.collection( 'documents' );
 
     var config   = app.get( 'config' );
     var bouncers = app.get( 'bouncers' );
@@ -29,57 +21,51 @@ module.exports = {
       url            : req.body.url
     };
 
-    doc.body(
-      {
-        url            : options.url,
-        allowedDomains : options.allowedDomains,
-        runs           : options.runs,
-        finished       : false,
-        data           : []
-      }
-    );
-
-    doc.save(function( err, savedDoc){
-      options[ 'log' ] = function( message ) {
-        app.get( 'logger' ).bouncer.call( null, savedDoc._id + ' - ' + message );
-      };
-
+    collection.insert( {
+      url            : options.url,
+      allowedDomains : options.allowedDomains,
+      runs           : options.runs,
+      finished       : false,
+      data           : []
+    }, function( err, result ) {
+      var savedDoc = result.ops[ 0 ];
       // kick off bouncer
       bouncers[ savedDoc._id ] = new Bouncer( options );
-      bouncers[ savedDoc._id ].runner.on( 'data', function( runData ) {
-        var data = doc.body( 'data' );
+      bouncers[ savedDoc._id ].runner.on( 'bouncer:data', function( runData ) {
         var log  = app.get( 'logger' ).couch;
 
-        data.push( runData );
-
-        doc.body( 'data', data );
-        doc.body( 'runsToGo', runData.runsToGo );
+        savedDoc.data.push( runData );
+        savedDoc.runsToGo = runData.runsToGo
 
         if ( runData.runsToGo === 0 ) {
-          doc.body( 'finished', true );
+          savedDoc.finished = true;
         }
 
-        doc.save( function( err, doc ) {
+        collection.update( {
+          _id : savedDoc._id
+        }, savedDoc,
+        function() {
           if ( err ) {
-            return app.get( 'logger' ).couch( err );
+            return app.get( 'logger' ).mongo( err );
           }
 
-          app.get( 'logger' ).couch( 'Saved bouncer run' );
+          app.get( 'logger' ).mongo( 'Saved bouncer run' );
         } );
       } );
 
-      bouncers[ savedDoc._id ].runner.on( 'error', function( error ) {
+      bouncers[ savedDoc._id ].runner.on( 'bouncer:error', function( error ) {
+        app.get( 'logger' ).bouncer( 'Failed bouncer run' );
 
-        doc.body( 'error', error );
+        savedDoc.error = error;
 
-        doc.save( function( err, doc ) {
+        collection.update( {
+          _id : savedDoc._id
+        },
+        savedDoc,
+        function() {
           if ( err ) {
             app.get( 'logger' ).bouncer( err );
           }
-
-          app.get( 'logger' ).bouncer( 'Faild bouncer' );
-
-          delete bouncers[ savedDoc._id ];
         } );
       } );
 

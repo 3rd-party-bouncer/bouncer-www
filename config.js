@@ -7,11 +7,9 @@ module.exports = {
     templates: path.join( __dirname, 'templates' ),
     layout   : path.join( __dirname, 'templates', 'layout.tpl' ),
   },
-  couchdb : {
-    host    : '127.0.0.1',
-    port    : 5984,
-    username: process.env.COUCHDB_USER,
-    password: process.env.COUCHDB_PASSWORD
+  mongodb : {
+    url      : process.env.MONGODB_URL || 'localhost:27017',
+    database : process.env.MONGODB_DATABASE || 'bouncer'
   },
   bouncer: {
     apiKey   : process.env.API_KEY,

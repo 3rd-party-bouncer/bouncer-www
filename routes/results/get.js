@@ -1,34 +1,28 @@
-var cushion = new (require('cushion').Connection)(
-                '127.0.0.1', // host
-                 5984, // port
-                process.env.COUCHDB_USER, // username
-                process.env.COUCHDB_PASSWORD // password
-              );
+var ObjectID = require( 'mongodb' ).ObjectID;
 
 module.exports = {
   route : 'results/:id',
   cllbck: function( req, res ) {
     var app            = req.app;
-    var currentBouncer = app.get( 'bouncers' )[ req.params.id ];
+    var db             = app.get( 'db' );
+    var collection     = db.collection( 'documents' );
 
-    var db  = cushion.database( 'bouncer' );
-    var doc = db.document( req.params.id );
-
-    doc.load( function( err, b ) {
+    collection.find( {
+      _id : new ObjectID( req.params.id )
+    } ).toArray( function( err, documents ) {
       if ( err ){
-        console.log( err );
         return;
       }
 
-      var docBody = b.body();
+      var doc = documents[ 0 ];
 
       app.get( 'helper' ).renderPage(
           app.get( 'config' ),
           __filename,
           { id: req.param.sid,
-            results: docBody.data,
-            url: docBody.url,
-            allowedDomains: docBody.allowedDomains,
+            results: doc,
+            url: doc.url,
+            allowedDomains: doc.allowedDomain,
           }, // templateData
           function ( error, page ) {
             res.send( page );

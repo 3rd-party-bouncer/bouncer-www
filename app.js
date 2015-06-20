@@ -7,18 +7,32 @@ var renderPage  = require( './lib/renderPage' );
 var logger      = require( './lib/logger' );
 var app         = express();
 
-app.use( bodyParser.urlencoded({ extended: true }) );
+var MongoClient = require('mongodb').MongoClient;
 
-app.set( 'config', config );
-app.set( 'logger', logger );
-app.set( 'bouncers', {} );
-app.set(
-  'helper', { renderPage: renderPage }
+// Connection URL
+var url = 'mongodb://' + config.mongodb.url + '/' + config.mongodb.database;
+// Use connect method to connect to the Server
+MongoClient.connect(
+  url,
+  function( err, db ) {
+    app.set( 'db', db );
+
+    app.use( bodyParser.urlencoded({ extended: true }) );
+
+    app.set( 'config', config );
+    app.set( 'logger', logger );
+    app.set( 'bouncers', {} );
+    app.set(
+      'helper', { renderPage: renderPage }
+    );
+
+    loadRoutes( app );
+
+    app.use( compression() );
+    app.use( express.static( __dirname + '/public', { maxAge : 31536000000 } ) );
+
+    console.log( 'listening to port:' + config.port );
+    app.listen( config.port );
+  }
 );
 
-loadRoutes( app );
-
-app.use( compression() );
-app.use( express.static( __dirname + '/public', { maxAge : 31536000000 } ) );
-
-app.listen( config.port );
