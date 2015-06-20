@@ -7,8 +7,6 @@ module.exports = {
     var db             = app.get( 'db' );
     var collection     = db.collection( 'documents' );
 
-    var doc = db.document( req.params.id );
-
     collection.find( {
       _id : new ObjectID( req.params.id )
     } ).toArray( function( err, documents ) {
