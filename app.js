@@ -10,7 +10,10 @@ var app         = express();
 var MongoClient = require('mongodb').MongoClient;
 
 // Connection URL
-var url = 'mongodb://' + config.mongodb.url + '/' + config.mongodb.database;
+var url = process.env.MONGOLAB_URI ?
+          process.env.MONGOLAB_URI :
+          'mongodb://' + config.mongodb.url + '/' + config.mongodb.database;
+
 // Use connect method to connect to the Server
 MongoClient.connect(
   url,
