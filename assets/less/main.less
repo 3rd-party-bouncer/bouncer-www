@@ -225,6 +225,26 @@ footer {
       content : '✓';
     }
   }
+
+  &.is-failed {
+    padding : .33333em 1.5em .33333em .66666em;
+
+    border : .125em solid @red;
+    color : @red;
+
+    &::after {
+      top : -.1em;
+
+      right : .125em;
+
+      font-size : 2em;
+      border-radius: 50%;
+
+      box-sizing : border-box;
+
+      content : '×';
+    }
+  }
 }
 
 

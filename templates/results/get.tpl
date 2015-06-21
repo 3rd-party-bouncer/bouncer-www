@@ -28,7 +28,11 @@
 
   <tbody>
     {% for date in data %}
-      <tr>
+      {% if loop.index0 == 1 %}
+        <tr class="resultTable--row__highlighted">
+      {% else %}
+        <tr>
+      {% endif %}
         <td>{{ loop.index }}</td>
         <td>{{ date.allowedUrl }}</td>
         <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.render }}ms</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.render }}ms</span></td>

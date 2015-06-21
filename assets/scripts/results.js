@@ -107,6 +107,23 @@
 
     var barChartWidth = 12;
 
+    var marks = svg.append( 'g' )
+                    .attr( 'class', 'resultGraphs--marks' );
+
+    marks.append( 'line' )
+          .attr( 'class', 'resultGraphs--mark__first')
+          .attr( 'x1', 0 )
+          .attr( 'x2', width )
+          .attr( 'y1', y( data.data[ 0 ][ 0 ] ) )
+          .attr( 'y2', y( data.data[ 0 ][ 0 ] ) );
+
+    marks.append( 'line' )
+          .attr( 'class', 'resultGraphs--mark__repeat')
+          .attr( 'x1', 0 )
+          .attr( 'x2', width )
+          .attr( 'y1', y( data.data[ 1 ][ 0 ] ) )
+          .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
+
     var gy = svg.append('g')
         .attr( 'class', 'resultGraphs--yAxisTicks' )
         .call( yAxis )
@@ -116,26 +133,6 @@
         .attr( 'class', 'resultGraphs--xAxisTicks' )
         .attr( 'transform', 'translate(0,' + height + ')' )
         .call( xAxis );
-
-
-    var marks = svg.append( 'g' )
-                    .attr( 'class', 'resultGraphs--marks' );
-
-    console.log( data );
-
-    marks.append( 'line' )
-          .attr( 'class', 'resultGraphs--mark__first')
-          .attr( 'x1', x( 0.5 ) )
-          .attr( 'x2', width )
-          .attr( 'y1', y( data.data[ 0 ][ 0 ] ) )
-          .attr( 'y2', y( data.data[ 0 ][ 0 ] ) );
-
-    marks.append( 'line' )
-          .attr( 'class', 'resultGraphs--mark__repeat')
-          .attr( 'x1', x( 0.5 ) )
-          .attr( 'x2', width )
-          .attr( 'y1', y( data.data[ 1 ][ 0 ] ) )
-          .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
 
     var bars = svg.append( 'g' )
                   .attr( 'class', 'resultGraphs--bars' );
@@ -173,7 +170,9 @@
       .then( function( result ) {
         table.innerHTML = nunjucks.renderString( template.innerHTML, result );
 
-        renderGraphs( result.data );
+        if ( result.data.length ) {
+          renderGraphs( result.data );
+        }
 
         if ( ! result.finished ) {
           loading.innerText = result.runsToGo ?
@@ -182,8 +181,14 @@
           setTimeout( fetchData, 7500 );
         } else {
           status.classList.remove( 'is-processing' );
-          status.classList.add( 'is-done' );
-          loading.innerText = 'DONE!';
+
+          if ( ! result.error ) {
+            status.classList.add( 'is-done' );
+            loading.innerText = 'DONE!';
+          } else {
+            status.classList.add( 'is-failed' );
+            loading.innerText = 'FAILED...';
+          }
         }
       } );
   }

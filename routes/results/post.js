@@ -62,7 +62,7 @@ module.exports = {
           _id : savedDoc._id
         },
         savedDoc,
-        function() {
+        function( error ) {
           if ( err ) {
             app.get( 'logger' ).bouncer( err );
           }
@@ -73,6 +73,19 @@ module.exports = {
         if ( err ) {
           app.get( 'logger' ).bouncer( 'Bouncer error!' );
           app.get( 'logger' ).bouncer( err );
+
+          savedDoc.error    = err;
+          savedDoc.finished = true;
+
+          collection.update( {
+            _id : savedDoc._id
+          },
+          savedDoc,
+          function( error ) {
+            if ( error ) {
+              app.get( 'logger' ).bouncer( error );
+            }
+          } );
         }
 
         delete bouncers[ savedDoc._id ];
