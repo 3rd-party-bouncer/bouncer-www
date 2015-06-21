@@ -22,7 +22,7 @@
           <nav>
             <a href="https://github.com/3rd-party-bouncer">Source</a> |
             <a href="/about">About</a> |
-            © 2015 party-bouncer.net
+            © 2015 bouncer.perf-tooling.today
           </nav>
         </footer>
     </body>

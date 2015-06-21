@@ -1,7 +1,11 @@
-<img alt="3rd Party Bouncer" height="250" itemprop="image" src="https://avatars3.githubusercontent.com/u/9380807?v=3&amp;s=250" width="250">
+<img alt="3rd Party Bouncer" itemprop="image" src="/bouncer.svg" width="300">
 <h2 class="result--headline">Results for <a href="<%= url %>"><%= url %></a></h2>
 <div id="status" class="status is-processing"><strong id="loading">Processing...</strong></div>
 <main id="results">
+  <ul class="u-listReset resultTable--legend">
+    <li class="resultTable--value__first">First view
+    <li class="resultTable--value__repeat">Repeat view
+  </ul>
   <table id="resultTable" class="resultTable"></table>
   <ul class="resultGraphs">
   </ul>
@@ -27,12 +31,12 @@
       <tr>
         <td>{{ loop.index }}</td>
         <td>{{ date.allowedUrl }}</td>
-        <td>{{ date.response.data.median.firstView.render }}ms | {{ date.response.data.median.repeatView.render }}ms</td>
-        <td>{{ date.response.data.median.firstView.SpeedIndex }} | {{ date.response.data.median.repeatView.SpeedIndex }}</td>
-        <td>{{ date.response.data.median.firstView.domElements }} | {{ date.response.data.median.repeatView.domElements }}</td>
-        <td>{{ date.response.data.median.firstView.docTime }} | {{ date.response.data.median.repeatView.docTime }}</td>
-        <td>{{ date.response.data.median.firstView.fullyLoaded }} | {{ date.response.data.median.repeatView.fullyLoaded }}</td>
-        <td>{{ date.response.data.median.firstView.requests[ 0 ] }} | {{ date.response.data.median.repeatView.requests[ 0 ] }}</td>
+        <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.render }}ms</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.render }}ms</span></td>
+        <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.SpeedIndex }}</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.SpeedIndex }}</span></td>
+        <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.domElements }}</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.domElements }}</span></td>
+        <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.docTime }}ms</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.docTime }}ms</span></td>
+        <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.fullyLoaded }}ms</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.fullyLoaded }}ms</span></td>
+        <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.requests[ 0 ] }}</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.requests[ 0 ] }}</span></td>
         <td><a href="{{ date.response.data.summary }}" target="_blank">View Result</a></td>
     {% endfor %}
   </tbody>

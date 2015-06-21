@@ -19,11 +19,11 @@
 }
 
   .resultGraphs--bar__first {
-    fill : lighten( @red, 15% );
+    fill : @red_bright;
   }
 
   .resultGraphs--bar__repeat {
-    fill : darken( @red, 15% );
+    fill : @red_dark;
   }
 
   .resultGraphs--xAxisTicks, .resultGraphs--yAxisTicks {
@@ -36,6 +36,20 @@
       stroke: @black;
       stroke-width: 1;
     }
+  }
+
+  .resultGraphs--marks {
+    line {
+      stroke-width : 2;
+    }
+  }
+
+  .resultGraphs--mark__first {
+    stroke : @red_bright;
+  }
+
+  .resultGraphs--mark__repeat {
+    stroke : @red_dark;
   }
 
   .resultGraphs--xAxisTicks {

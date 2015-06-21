@@ -117,7 +117,30 @@
         .attr( 'transform', 'translate(0,' + height + ')' )
         .call( xAxis );
 
-    svg.selectAll( '.resultGraphs--bar__first' )
+
+    var marks = svg.append( 'g' )
+                    .attr( 'class', 'resultGraphs--marks' );
+
+    console.log( data );
+
+    marks.append( 'line' )
+          .attr( 'class', 'resultGraphs--mark__first')
+          .attr( 'x1', x( 0.5 ) )
+          .attr( 'x2', width )
+          .attr( 'y1', y( data.data[ 0 ][ 0 ] ) )
+          .attr( 'y2', y( data.data[ 0 ][ 0 ] ) );
+
+    marks.append( 'line' )
+          .attr( 'class', 'resultGraphs--mark__repeat')
+          .attr( 'x1', x( 0.5 ) )
+          .attr( 'x2', width )
+          .attr( 'y1', y( data.data[ 1 ][ 0 ] ) )
+          .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
+
+    var bars = svg.append( 'g' )
+                  .attr( 'class', 'resultGraphs--bars' );
+
+    bars.selectAll( '.resultGraphs--bar__first' )
         .data( data.data[ 0 ] )
       .enter().append( 'rect' )
         .attr( 'class', 'resultGraphs--bar__first' )
@@ -126,7 +149,7 @@
         .attr( 'y', function( d ) { return y( d ); })
         .attr( 'height', function(d) { return height - y( d ); } );
 
-    svg.selectAll( '.resultGraphs--bar__repeat' )
+    bars.selectAll( '.resultGraphs--bar__repeat' )
         .data( data.data[ 1 ] )
       .enter().append( 'rect' )
         .attr( 'class', 'resultGraphs--bar__repeat' )
