@@ -141,6 +141,10 @@
           } )
           .html( function( d ) {
             return '<h4 class="resultGraphs--item--headline">' + d.name + '</h4>' +
+                    '<div class="resultGraphs--legend">' +
+                      '<span class="resultGraphs--legend__first">First</span>' +
+                      '<span class="resultGraphs--legend__repeat">Repeat</span>' +
+                    '</div>' +
                     '<div class="resultGraphs--item--container"></div>';
           } );
 

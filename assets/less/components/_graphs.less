@@ -66,6 +66,48 @@
       position : relative;
     }
 
+    .resultGraphs--item--headline {
+      margin-bottom : .5em;
+    }
+
+  .resultGraphs--legend__first, .resultGraphs--legend__repeat {
+    position : relative;
+
+    display : inline-block;
+    padding : .25em 1.5em;
+
+    &::before {
+      position : absolute;
+
+      top : .375em;
+
+      display : block;
+
+      width : .75em;
+      height : .75em;
+
+      border-radius : 50%;
+
+      content : '';
+    }
+  }
+
+  .resultGraphs--legend__first {
+    &::before {
+      background : @blue;
+
+      right : .5em;
+    }
+  }
+
+  .resultGraphs--legend__repeat {
+    &::before {
+      background : @blue_bright;
+
+      left : .5em;
+    }
+  }
+
   .resultGraphs--line__first, .resultGraphs--line__repeat {
     stroke-width : 3;
   }
