@@ -1,4 +1,29 @@
 ;( function( d3 ) {
+  /**
+   * Get parent of dom element with
+   * given class
+   *
+   * @param  {Object} el        element
+   * @param  {String} className className
+   * @return {Object}           parent element with given class
+   */
+  function getParent( el, className ) {
+    var parent = null;
+    var p      = el.parentNode;
+
+    while ( p !== null ) {
+      var o = p;
+
+      if ( o.classList.contains( className ) ) {
+        parent = o;
+        break;
+      }
+
+      p = o.parentNode;
+    }
+    return parent; // returns an Array []
+  }
+
   var id = window.location.href.split( '/' ).pop();
 
   var keysToRender = [ {
@@ -35,27 +60,38 @@
         key  : key.key,
         data : [
           data.map( function( date ) {
-            if ( key.key !== 'requests' ) {
-              return date.response.data.median.firstView ?
-                date.response.data.median.firstView[ key.key ] :
-                0;
-            } else {
-              return date.response.data.median.firstView ?
-                date.response.data.median.firstView[ key.key ][ 0 ] :
-                0;
-            }
             console.log( date );
-
+            if ( key.key !== 'requests' ) {
+              return {
+                value : date.response.data.median.firstView ?
+                        date.response.data.median.firstView[ key.key ] :
+                        0,
+                allowed : date.allowedUrl
+              };
+            } else {
+              return {
+                value : date.response.data.median.firstView ?
+                        date.response.data.median.firstView[ key.key ][ 0 ] :
+                        0,
+                allowed : date.allowedUrl
+              };
+            }
           } ),
           data.map( function( date ) {
             if ( key.key !== 'requests' ) {
-              return date.response.data.median.repeatView ?
-                date.response.data.median.repeatView[ key.key ] :
-                0;
+              return {
+                value : date.response.data.median.repeatView ?
+                        date.response.data.median.repeatView[ key.key ] :
+                        0,
+                allowed : date.allowedUrl
+              };
             } else {
-              return date.response.data.median.repeatView ?
-                date.response.data.median.repeatView[ key.key ][ 0 ] :
-                0;
+              return {
+                value : date.response.data.median.repeatView ?
+                        date.response.data.median.repeatView[ key.key ][ 0 ] :
+                        0,
+                allowed : date.allowedUrl
+              };
             }
           } )
         ]
@@ -63,6 +99,26 @@
     } )
 
     return normalizedData;
+  }
+
+  function showBarHelp( data ) {
+    d3.selectAll( '.resultGraphs--help' ).remove();
+
+    var bar           = this;
+    var bBox          = bar.getBBox();
+    var detailBox     = document.createElement( 'div' );
+    var listContainer = getParent( bar, 'resultGraphs--item--container' );
+
+    detailBox.classList.add( 'resultGraphs--help' );
+
+    detailBox.innerHTML =
+      'Allowed URL(s):<br><strong>' + bar.dataset.allowed + '</strong>';
+
+    listContainer.appendChild( detailBox );
+
+    detailBox.classList.add( 'p--graphs--detailBox' );
+    detailBox.style.left = ( bBox.x + bBox.width / 2 - detailBox.getBoundingClientRect().width / 2 ) + 'px';
+    detailBox.style.top = ( bBox.y - detailBox.getBoundingClientRect().height ) + 'px';
   }
 
   function renderTable( container, data ) {
@@ -102,8 +158,13 @@
 
     var y = d3.scale.linear()
         .domain( [
-              0,
-              d3.max( [ d3.max( data.data[ 0 ] ), d3.max( data.data[ 1 ] ) ] )
+          0,
+          d3.max(
+            [
+              d3.max( data.data[ 0 ].map( function( d ) { return d.value; } ) ),
+              d3.max( data.data[ 1 ].map( function( d ) { return d.value; } ) )
+            ]
+          )
         ] )
         .range( [ height, 0 ] )
 
@@ -127,7 +188,7 @@
 
     var line = d3.svg.line()
         .x( function( d, i ) { return x( i + 1 ); } )
-        .y( function( d ) { return y( d ); } )
+        .y( function( d ) { return y( d.value ); } )
         .interpolate( 'cardinal' );
 
     var container = d3.select( containerEl ).html( '<svg></svg>' );
@@ -142,21 +203,6 @@
     var marks = svg.append( 'g' )
                     .attr( 'class', 'resultGraphs--marks' );
 
-    // marks.append( 'line' )
-    //       .attr( 'class', 'resultGraphs--mark__first')
-    //       .attr( 'x1', 0 )
-    //       .attr( 'x2', width )
-    //       .attr( 'y1', y( data.data[ 0 ][ 0 ] ) )
-    //       .attr( 'y2', y( data.data[ 0 ][ 0 ] ) );
-
-    // marks.append( 'line' )
-    //       .attr( 'class', 'resultGraphs--mark__repeat')
-    //       .attr( 'x1', 0 )
-    //       .attr( 'x2', width )
-    //       .attr( 'y1', y( data.data[ 1 ][ 0 ] ) )
-    //       .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
-
-
     var bgBars = svg.append( 'g' )
         .attr( 'class', 'resultGraphs--bgBars' );
 
@@ -167,7 +213,9 @@
         .attr( 'x', function( d, i ) { return x( i + .5 ); } )
         .attr( 'width', function( d, i ) { return x( i + .5 ) - x( i - .5 ) } )
         .attr( 'y', function( d ) { return 0; } )
-        .attr( 'height', function(d) { return height; } );
+        .attr( 'height', function( d ) { return height; } )
+        .attr( 'data-allowed', function( d ) { return d.allowed } )
+        .on( 'mouseenter', showBarHelp );
 
     var gy = svg.append( 'g' )
         .attr( 'class', 'resultGraphs--yAxisTicks' )
@@ -198,7 +246,7 @@
         .attr( 'r', 6 )
         .attr( 'class', 'resultGraphs--circle__first' )
         .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
-        .attr( 'cy', function( d ) { return y( d ); });
+        .attr( 'cy', function( d ) { return y( d.value ); });
 
     circles.selectAll( '.resultGraphs--circle__repeat' )
         .data( data.data[ 1 ] )
@@ -206,7 +254,7 @@
         .attr( 'r', 6 )
         .attr( 'class', 'resultGraphs--circle__repeat' )
         .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
-        .attr( 'cy', function( d ) { return y( d ); });
+        .attr( 'cy', function( d ) { return y( d.value ); });
 
     function customAxis( g ) {
       g.selectAll( 'text' )
