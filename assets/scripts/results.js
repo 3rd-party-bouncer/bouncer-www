@@ -20,12 +20,16 @@
 
   var loading  = document.getElementById( 'loading' );
   var table    = document.getElementById( 'resultTable' );
-  var template = document.getElementById( 'resultsTpl' );
+  var template = document.getElementById( 'resultTableEachTpl' );
   var status   = document.getElementById( 'status' );
 
-  var resultGraphs = d3.select( '.resultGraphs' );
+  function renderTable( container, data ) {
+    var table = document.querySelector( container );
+    table.innerHTML = nunjucks.renderString( template.innerHTML, { data : data } );
+  }
 
-  function renderGraphs( data ) {
+  function renderGraphs( container, data ) {
+    var resultGraphs = d3.select( container );
     var normalizedData = [];
 
     keysToRender.forEach( function( key ) {
@@ -98,6 +102,11 @@
         .tickSize( width )
         .orient( 'right' );
 
+    var line = d3.svg.line()
+        .x( function( d, i ) { return x( i + 1 ); } )
+        .y( function( d ) { return y( d ); } )
+        .interpolate( 'cardinal' );
+
     var container = d3.select( containerEl ).html( '<svg></svg>' );
     var svg       = container.select( 'svg' )
                               .attr( 'width', width + margin.left + margin.right )
@@ -110,19 +119,20 @@
     var marks = svg.append( 'g' )
                     .attr( 'class', 'resultGraphs--marks' );
 
-    marks.append( 'line' )
-          .attr( 'class', 'resultGraphs--mark__first')
-          .attr( 'x1', 0 )
-          .attr( 'x2', width )
-          .attr( 'y1', y( data.data[ 0 ][ 0 ] ) )
-          .attr( 'y2', y( data.data[ 0 ][ 0 ] ) );
+    // marks.append( 'line' )
+    //       .attr( 'class', 'resultGraphs--mark__first')
+    //       .attr( 'x1', 0 )
+    //       .attr( 'x2', width )
+    //       .attr( 'y1', y( data.data[ 0 ][ 0 ] ) )
+    //       .attr( 'y2', y( data.data[ 0 ][ 0 ] ) );
 
-    marks.append( 'line' )
-          .attr( 'class', 'resultGraphs--mark__repeat')
-          .attr( 'x1', 0 )
-          .attr( 'x2', width )
-          .attr( 'y1', y( data.data[ 1 ][ 0 ] ) )
-          .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
+    // marks.append( 'line' )
+    //       .attr( 'class', 'resultGraphs--mark__repeat')
+    //       .attr( 'x1', 0 )
+    //       .attr( 'x2', width )
+    //       .attr( 'y1', y( data.data[ 1 ][ 0 ] ) )
+    //       .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
+
 
     var gy = svg.append('g')
         .attr( 'class', 'resultGraphs--yAxisTicks' )
@@ -134,26 +144,34 @@
         .attr( 'transform', 'translate(0,' + height + ')' )
         .call( xAxis );
 
-    var bars = svg.append( 'g' )
-                  .attr( 'class', 'resultGraphs--bars' );
+    svg.append( 'path' )
+          .datum( data.data[ 0 ] )
+          .attr( 'class', 'resultGraphs--line__first' )
+          .attr( 'd', line );
 
-    bars.selectAll( '.resultGraphs--bar__first' )
+    svg.append( 'path' )
+          .datum( data.data[ 1 ] )
+          .attr( 'class', 'resultGraphs--line__repeat' )
+          .attr( 'd', line );
+
+    var circles = svg.append( 'g' )
+                  .attr( 'class', 'resultGraphs--circles' );
+
+    circles.selectAll( '.resultGraphs--circle__first' )
         .data( data.data[ 0 ] )
-      .enter().append( 'rect' )
-        .attr( 'class', 'resultGraphs--bar__first' )
-        .attr( 'x', function( d, i ) { return x( i + 1 ) - barChartWidth; } )
-        .attr( 'width', barChartWidth )
-        .attr( 'y', function( d ) { return y( d ); })
-        .attr( 'height', function(d) { return height - y( d ); } );
+      .enter().append( 'circle' )
+        .attr( 'r', 6 )
+        .attr( 'class', 'resultGraphs--circle__first' )
+        .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
+        .attr( 'cy', function( d ) { return y( d ); });
 
-    bars.selectAll( '.resultGraphs--bar__repeat' )
+    circles.selectAll( '.resultGraphs--circle__repeat' )
         .data( data.data[ 1 ] )
-      .enter().append( 'rect' )
-        .attr( 'class', 'resultGraphs--bar__repeat' )
-        .attr( 'x', function( d, i ) { return x( i + 1 ); } )
-        .attr( 'width', barChartWidth )
-        .attr( 'y', function( d ) { return y( d ); })
-        .attr( 'height', function(d) { return height - y( d ); } );
+      .enter().append( 'circle' )
+        .attr( 'r', 6 )
+        .attr( 'class', 'resultGraphs--circle__repeat' )
+        .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
+        .attr( 'cy', function( d ) { return y( d ); });
 
     function customAxis( g ) {
       g.selectAll( 'text' )
@@ -168,10 +186,17 @@
         return response.json();
       } )
       .then( function( result ) {
-        table.innerHTML = nunjucks.renderString( template.innerHTML, result );
 
-        if ( result.data.length ) {
-          renderGraphs( result.data );
+        if ( result.data.length && ! result.error ) {
+          var allVsNoneData = [ result.data[ 0 ], result.data[ 1 ] ];
+
+          renderTable( '#resultTable--allVsNone', allVsNoneData );
+          renderGraphs( '#resultGraphs--allVsNone', allVsNoneData );
+
+          var noneVsEachData = result.data.slice( 1 );
+
+          renderTable( '#resultTable--noneVsEach', noneVsEachData );
+          renderGraphs( '#resultGraphs--noneVsEach', noneVsEachData );
         }
 
         if ( ! result.finished ) {

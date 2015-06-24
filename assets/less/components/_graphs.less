@@ -18,22 +18,37 @@
   }
 }
 
-  .resultGraphs--bar__first {
-    fill : @red_bright;
+  .resultGraphs--circle__first {
+    fill : @blue;
   }
 
-  .resultGraphs--bar__repeat {
-    fill : @red_dark;
+  .resultGraphs--circle__repeat {
+    fill : @blue_bright;
+  }
+
+  .resultGraphs--line__first, .resultGraphs--line__repeat {
+    stroke-width : 3;
+  }
+
+  .resultGraphs--line__first {
+    fill : none;
+    stroke : @blue;
+  }
+
+  .resultGraphs--line__repeat {
+    fill : none;
+    stroke : @blue_bright;
   }
 
   .resultGraphs--xAxisTicks, .resultGraphs--yAxisTicks {
     line {
-      stroke: @black;
+      stroke: @grey_bright;
       stroke-width: 1;
     }
 
     text {
-      stroke: @black;
+      font-size : .66em;
+      stroke: @grey;
       stroke-width: 1;
     }
   }

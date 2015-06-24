@@ -2,16 +2,26 @@
 <h2 class="result--headline">Results for <a href="<%= url %>"><%= url %></a></h2>
 <div id="status" class="status is-processing"><strong id="loading">Processing...</strong></div>
 <main id="results">
-  <ul class="u-listReset resultTable--legend">
-    <li class="resultTable--value__first">First view
-    <li class="resultTable--value__repeat">Repeat view
-  </ul>
-  <table id="resultTable" class="resultTable"></table>
-  <ul class="resultGraphs">
-  </ul>
+  <div>
+    <h3>All 3rd Parties VS. No 3rd Party</h3>
+    <ul class="u-listReset resultTable--legend">
+      <li class="resultTable--value__first">First view
+      <li class="resultTable--value__repeat">Repeat view
+    </ul>
+    <table id="resultTable--allVsNone" class="resultTable"></table>
+    <ul id="resultGraphs--allVsNone" class="resultGraphs"></ul>
+
+    <h3>No 3rd Parties VS. each 3rd Party</h3>
+    <ul class="u-listReset resultTable--legend">
+      <li class="resultTable--value__first">First view
+      <li class="resultTable--value__repeat">Repeat view
+    </ul>
+    <table id="resultTable--noneVsEach" class="resultTable"></table>
+    <ul id="resultGraphs--noneVsEach" class="resultGraphs"></ul>
+  </div>
 </main>
 
-<script id="resultsTpl" type="text/template">
+<script id="resultTableEachTpl" type="text/template">
   <thead>
     <tr>
       <th></th>
@@ -28,11 +38,7 @@
 
   <tbody>
     {% for date in data %}
-      {% if loop.index0 == 1 %}
-        <tr class="resultTable--row__highlighted">
-      {% else %}
-        <tr>
-      {% endif %}
+      <tr>
         <td>{{ loop.index }}</td>
         <td>{{ date.allowedUrl }}</td>
         <td><span class="resultTable--value__first">{{ date.response.data.median.firstView.render }}ms</span><span class="resultTable--value__repeat">{{ date.response.data.median.repeatView.render }}ms</span></td>
