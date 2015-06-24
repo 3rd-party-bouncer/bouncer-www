@@ -95,7 +95,7 @@
 
   function renderGraph( data ) {
     var containerEl = this.querySelector( '.resultGraphs--item--container' );
-    var margin = { top : 20, right : 0, bottom : 30, left : 0 };
+    var margin = { top : 25, right : 0, bottom : 30, left : 0 };
     var width = containerEl.clientWidth - margin.left - margin.right;
     var height   = width * 0.6 - margin.top - margin.bottom;
 
@@ -112,7 +112,7 @@
         .range( [ 0, width ] );
 
     var xAxis = d3.svg.axis()
-        .scale(x)
+        .scale( x )
         .tickFormat( function( d ) {
           return ( d % 1 !== 0 || ! d || d === data.data[ 0 ].length + 1 ) ?
                    '' :
@@ -157,7 +157,19 @@
     //       .attr( 'y2', y( data.data[ 1 ][ 0 ] ) );
 
 
-    var gy = svg.append('g')
+    var bgBars = svg.append( 'g' )
+        .attr( 'class', 'resultGraphs--bgBars' );
+
+    bgBars.selectAll( '.resultGraphs--bgBar' )
+        .data( data.data[ 0 ] )
+      .enter().append( 'rect' )
+        .attr( 'class', 'resultGraphs--bgBar' )
+        .attr( 'x', function( d, i ) { return x( i + .5 ); } )
+        .attr( 'width', function( d, i ) { return x( i + .5 ) - x( i - .5 ) } )
+        .attr( 'y', function( d ) { return 0; } )
+        .attr( 'height', function(d) { return height; } );
+
+    var gy = svg.append( 'g' )
         .attr( 'class', 'resultGraphs--yAxisTicks' )
         .call( yAxis )
         .call( customAxis );

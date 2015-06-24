@@ -18,6 +18,14 @@
   }
 }
 
+  .resultGraphs--bgBar {
+    fill : @grey_brighter;
+
+    &:nth-child( 2n ) {
+      fill : lighten( @grey_brighter, 3.75% );
+    }
+  }
+
   .resultGraphs--circle__first {
     fill : @blue;
   }
