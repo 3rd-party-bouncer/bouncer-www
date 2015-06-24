@@ -112,7 +112,7 @@
     detailBox.classList.add( 'resultGraphs--help' );
 
     detailBox.innerHTML =
-      'Allowed URL(s):<br><strong>' + bar.dataset.allowed + '</strong>';
+      'Allowed 3rd Party URL(s):<br><strong>' + bar.dataset.allowed + '</strong>';
 
     listContainer.appendChild( detailBox );
 

@@ -39,10 +39,27 @@
     position : absolute;
     text-align : center;
 
-    background : @blue_bright;
+    background : @grey;
     color      : @white;
 
     padding : .25em .5em;
+
+    &::before {
+      position : absolute;
+
+      top  : 100%;
+      left : 50%;
+
+      content : '';
+
+      transform : translateX( -.5em );
+      width  : 0;
+      height : 0;
+
+      border-style: solid;
+      border-width: .5em .5em 0 .5em;
+      border-color: @grey transparent transparent transparent;
+    }
   }
 
     .resultGraphs--item--container {
