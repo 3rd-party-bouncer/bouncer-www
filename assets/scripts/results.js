@@ -118,7 +118,7 @@
 
     detailBox.classList.add( 'p--graphs--detailBox' );
     detailBox.style.left = ( bBox.x + bBox.width / 2 - detailBox.getBoundingClientRect().width / 2 ) + 'px';
-    detailBox.style.top = ( bBox.y - detailBox.getBoundingClientRect().height ) + 'px';
+    detailBox.style.top = ( bBox.y + bBox.height + detailBox.getBoundingClientRect().height ) + 'px';
   }
 
   function renderTable( container, data ) {
