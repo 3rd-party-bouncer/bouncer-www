@@ -120,13 +120,15 @@ footer {
 
   text-align : center;
 
+  color : @blue;
+
   z-index : 0;
 
   width : 25em;
 
   background : @white;
 
-  border : .125em solid @red;
+  border : .125em solid @blue;
 }
 
 .resultTable {
@@ -143,7 +145,7 @@ footer {
   }
 
   tr:nth-child(odd) {
-     background-color: #ccc;
+     background-color: @grey_bright;
   }
 
   table {
@@ -188,8 +190,8 @@ footer {
 
 
   &.is-processing {
-    color : @red;
-    border : .125em solid @red;
+    color : @blue;
+    border : .125em solid @blue;
     padding : .33333em 2em .33333em .66666em;
 
     &::after {
@@ -202,9 +204,9 @@ footer {
 
       content : '';
 
-      border: .1em @red dashed;
+      border: .1em @blue dashed;
 
-      box-shadow : inset 0 0 0 .1em @red;
+      box-shadow : inset 0 0 0 .1em @blue;
 
       background-color: transparent;
 

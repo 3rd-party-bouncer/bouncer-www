@@ -1,6 +1,6 @@
 <img alt="3rd Party Bouncer" itemprop="image" src="/bouncer.svg" width="300">
 <h2 class="result--headline">Results for <a href="<%= url %>"><%= url %></a></h2>
-<div id="status" class="status is-processing"><strong id="loading">Processing...</strong></div>
+<div id="status" class="status is-processing"><strong id="loading">Evaluating 3rd Parties...</strong></div>
 <main id="results">
   <div>
     <h3>All 3rd Parties VS. No 3rd Party</h3>

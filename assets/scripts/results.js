@@ -5,17 +5,20 @@
     key : 'render',
     label : 'Start Render'
   }, {
-    key : 'SpeedIndex',
+    key   : 'SpeedIndex',
     label : 'SpeedIndex'
   }, {
-    key : 'domElements',
+    key   : 'domElements',
     label : 'Number of DOM Elements'
   }, {
-    key : 'docTime',
+    key   : 'docTime',
     label : 'Document Complete'
   }, {
-    key : 'fullyLoaded',
+    key   : 'fullyLoaded',
     label : 'Fully loaded'
+  }, {
+    key   : 'requests',
+    label : 'Number of Requests'
   } ];
 
   var loading  = document.getElementById( 'loading' );
@@ -23,13 +26,7 @@
   var template = document.getElementById( 'resultTableEachTpl' );
   var status   = document.getElementById( 'status' );
 
-  function renderTable( container, data ) {
-    var table = document.querySelector( container );
-    table.innerHTML = nunjucks.renderString( template.innerHTML, { data : data } );
-  }
-
-  function renderGraphs( container, data ) {
-    var resultGraphs = d3.select( container );
+  function _getNormalizedData( data ) {
     var normalizedData = [];
 
     keysToRender.forEach( function( key ) {
@@ -38,18 +35,44 @@
         key  : key.key,
         data : [
           data.map( function( date ) {
-            return date.response.data.median.firstView ?
-              date.response.data.median.firstView[ key.key ] :
-              0;
+            if ( key.key !== 'requests' ) {
+              return date.response.data.median.firstView ?
+                date.response.data.median.firstView[ key.key ] :
+                0;
+            } else {
+              return date.response.data.median.firstView ?
+                date.response.data.median.firstView[ key.key ][ 0 ] :
+                0;
+            }
+            console.log( date );
+
           } ),
           data.map( function( date ) {
-            return date.response.data.median.repeatView ?
-              date.response.data.median.repeatView[ key.key ] :
-              0;
+            if ( key.key !== 'requests' ) {
+              return date.response.data.median.repeatView ?
+                date.response.data.median.repeatView[ key.key ] :
+                0;
+            } else {
+              return date.response.data.median.repeatView ?
+                date.response.data.median.repeatView[ key.key ][ 0 ] :
+                0;
+            }
           } )
         ]
       } );
     } )
+
+    return normalizedData;
+  }
+
+  function renderTable( container, data ) {
+    var table = document.querySelector( container );
+    table.innerHTML = nunjucks.renderString( template.innerHTML, { data : data } );
+  }
+
+  function renderGraphs( container, data ) {
+    var resultGraphs   = d3.select( container );
+    var normalizedData = _getNormalizedData( data );
 
     var items = resultGraphs.selectAll( '.resultGraphs--item' )
                             .data( normalizedData );
