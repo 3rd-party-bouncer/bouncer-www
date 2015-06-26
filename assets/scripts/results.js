@@ -285,18 +285,17 @@
       } )
       .then( function( result ) {
 
-        if ( result.data.length && ! result.error ) {
+        if ( result.data.length > 1  && ! result.error ) {
           var allVsNoneData = [ result.data[ 0 ], result.data[ 1 ] ];
 
           renderTable( '#resultTable--allVsNone', allVsNoneData );
           renderGraphs( '#resultGraphs--allVsNone', allVsNoneData );
 
-          if ( result.data[ 1 ] ) {
-            var noneVsEachData = result.data.slice( 1 );
 
-            renderTable( '#resultTable--noneVsEach', noneVsEachData );
-            renderGraphs( '#resultGraphs--noneVsEach', noneVsEachData );
-          }
+          var noneVsEachData = result.data.slice( 1 );
+
+          renderTable( '#resultTable--noneVsEach', noneVsEachData );
+          renderGraphs( '#resultGraphs--noneVsEach', noneVsEachData );
         }
 
         if ( ! result.finished ) {
