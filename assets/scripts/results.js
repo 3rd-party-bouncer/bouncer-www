@@ -27,20 +27,23 @@
   var id = window.location.href.split( '/' ).pop();
 
   var keysToRender = [ {
-    key : 'render',
-    label : 'Start Render'
+    key    : 'render',
+    label  : 'Start Render',
+    timing : true
   }, {
-    key   : 'SpeedIndex',
-    label : 'SpeedIndex'
+    key    : 'SpeedIndex',
+    label  : 'SpeedIndex'
   }, {
-    key   : 'domElements',
-    label : 'Number of DOM Elements'
+    key    : 'domElements',
+    label  : 'Number of DOM Elements'
   }, {
-    key   : 'docTime',
-    label : 'Document Complete'
+    key    : 'docTime',
+    label  : 'Document Complete',
+    timing : true
   }, {
-    key   : 'fullyLoaded',
-    label : 'Fully loaded'
+    key    : 'fullyLoaded',
+    label  : 'Fully loaded',
+    timing : true
   }, {
     key   : 'requests',
     label : 'Number of Requests'
@@ -54,45 +57,44 @@
   function _getNormalizedData( data ) {
     var normalizedData = [];
 
+
+    function getNormalizedDate( date, key, type ) {
+      var returnValue;
+
+      if ( key.key !== 'requests' ) {
+        returnValue =  {
+          value : date.response.data.median[ type ] ?
+                  date.response.data.median[ type ][ key.key ] :
+                  0,
+          allowed : date.allowedUrl
+        };
+      } else {
+        returnValue = {
+          value : date.response.data.median[ type ] ?
+                  date.response.data.median[ type ][ key.key ][ 0 ] :
+                  0,
+          allowed : date.allowedUrl
+        };
+      }
+
+      if ( key.timing ) {
+        returnValue.withoutTTFB = returnValue.value - date.response.data.median[ type ].TTFB;
+      }
+
+      return returnValue;
+    }
+
     keysToRender.forEach( function( key ) {
       normalizedData.push( {
-        name : key.label,
-        key  : key.key,
-        data : [
+        name   : key.label,
+        key    : key.key,
+        timing : !! key.timing,
+        data   : [
           data.map( function( date ) {
-            console.log( date );
-            if ( key.key !== 'requests' ) {
-              return {
-                value : date.response.data.median.firstView ?
-                        date.response.data.median.firstView[ key.key ] :
-                        0,
-                allowed : date.allowedUrl
-              };
-            } else {
-              return {
-                value : date.response.data.median.firstView ?
-                        date.response.data.median.firstView[ key.key ][ 0 ] :
-                        0,
-                allowed : date.allowedUrl
-              };
-            }
+            return getNormalizedDate( date, key, 'firstView' );
           } ),
           data.map( function( date ) {
-            if ( key.key !== 'requests' ) {
-              return {
-                value : date.response.data.median.repeatView ?
-                        date.response.data.median.repeatView[ key.key ] :
-                        0,
-                allowed : date.allowedUrl
-              };
-            } else {
-              return {
-                value : date.response.data.median.repeatView ?
-                        date.response.data.median.repeatView[ key.key ][ 0 ] :
-                        0,
-                allowed : date.allowedUrl
-              };
-            }
+            return getNormalizedDate( date, key, 'repeatView' );
           } )
         ]
       } );
@@ -116,7 +118,6 @@
 
     listContainer.appendChild( detailBox );
 
-    detailBox.classList.add( 'p--graphs--detailBox' );
     detailBox.style.left = ( bBox.x + bBox.width / 2 - detailBox.getBoundingClientRect().width / 2 ) + 'px';
     detailBox.style.top = ( bBox.y + bBox.height + detailBox.getBoundingClientRect().height ) + 'px';
   }
@@ -231,34 +232,44 @@
         .attr( 'transform', 'translate(0,' + height + ')' )
         .call( xAxis );
 
-    svg.append( 'path' )
-          .datum( data.data[ 0 ] )
-          .attr( 'class', 'resultGraphs--line__first' )
-          .attr( 'd', line );
-
-    svg.append( 'path' )
-          .datum( data.data[ 1 ] )
-          .attr( 'class', 'resultGraphs--line__repeat' )
-          .attr( 'd', line );
-
     var circles = svg.append( 'g' )
                   .attr( 'class', 'resultGraphs--circles' );
 
-    circles.selectAll( '.resultGraphs--circle__first' )
-        .data( data.data[ 0 ] )
-      .enter().append( 'circle' )
-        .attr( 'r', 6 )
-        .attr( 'class', 'resultGraphs--circle__first' )
-        .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
-        .attr( 'cy', function( d ) { return y( d.value ); });
+    drawLineWithCircles( data.data[ 0 ], 'first', svg, circles );
+    drawLineWithCircles( data.data[ 1 ], 'repeat', svg, circles );
 
-    circles.selectAll( '.resultGraphs--circle__repeat' )
-        .data( data.data[ 1 ] )
-      .enter().append( 'circle' )
-        .attr( 'r', 6 )
-        .attr( 'class', 'resultGraphs--circle__repeat' )
-        .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
-        .attr( 'cy', function( d ) { return y( d.value ); });
+
+    // TODO implement this in a different way
+    // if ( data.timing ) {
+    //   drawLineWithCircles( data.data[ 0 ].map( function( date ) {
+    //     return {
+    //       allowed : date.allowed,
+    //       value   : date.withoutTTFB
+    //     };
+    //   } ), 'firstWithoutTTFB', svg, circles );
+
+    //   drawLineWithCircles( data.data[ 1 ].map( function( date ) {
+    //     return {
+    //       allowed : date.allowed,
+    //       value   : date.withoutTTFB
+    //     };
+    //   } ), 'repeatWithoutTTFB', svg, circles );
+    // }
+
+    function drawLineWithCircles( data, type, svg, circleContainer ) {
+      svg.append( 'path' )
+            .datum( data )
+            .attr( 'class', 'resultGraphs--line__' + type )
+            .attr( 'd', line );
+
+      circleContainer.selectAll( '.resultGraphs--circle__' + type )
+          .data( data )
+        .enter().append( 'circle' )
+          .attr( 'r', 5 )
+          .attr( 'class', 'resultGraphs--circle__' + type )
+          .attr( 'cx', function( d, i ) { return x( i + 1 ); } )
+          .attr( 'cy', function( d ) { return y( d.value ); });
+    }
 
     function customAxis( g ) {
       g.selectAll( 'text' )

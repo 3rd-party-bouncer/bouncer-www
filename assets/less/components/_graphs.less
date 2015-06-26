@@ -8,9 +8,17 @@
 
   > li {
     display : inline-block;
-    width : 50%;
+    width : 100%;
 
     padding : 1em;
+
+    @media ( min-width: 50em ) and (max-width: 80em) {
+      width : 50%;
+    }
+
+    @media ( min-width: 80em ) {
+      width : 33.333%;
+    }
   }
 
   .domain {
@@ -26,11 +34,13 @@
     }
   }
 
-  .resultGraphs--circle__first {
+  .resultGraphs--circle__first,
+  .resultGraphs--circle__repeat {
     fill : @blue;
   }
 
-  .resultGraphs--circle__repeat {
+  .resultGraphs--circle__firstWithoutTTFB,
+  .resultGraphs--circle__repeatWithoutTTFB {
     fill : @blue_bright;
   }
 
@@ -43,6 +53,8 @@
     color      : @white;
 
     padding : .25em .5em;
+
+    // animation : slideUp .25s 1 forwards;
 
     &::before {
       position : absolute;
@@ -62,6 +74,18 @@
     }
   }
 
+  // @keyframes slideUp {
+  //   0%   {
+  //     opacity   : 0;
+  //     transform : translate( 0, .25em );
+  //   }
+
+  //   100% {
+  //     opacity: 1;
+  //     transform : translate( 0, 0 );
+  //   }
+  // }
+
     .resultGraphs--item--container {
       position : relative;
     }
@@ -73,52 +97,55 @@
   .resultGraphs--legend__first, .resultGraphs--legend__repeat {
     position : relative;
 
+    color : @blue;
+
     display : inline-block;
     padding : .25em 1.5em;
-
-    &::before {
-      position : absolute;
-
-      top : .375em;
-
-      display : block;
-
-      width : .75em;
-      height : .75em;
-
-      border-radius : 50%;
-
-      content : '';
-    }
+    margin  : 0 .5em;
   }
 
   .resultGraphs--legend__first {
-    &::before {
-      background : @blue;
-
-      right : .5em;
-    }
+    border-bottom : 3px solid @blue;
   }
 
   .resultGraphs--legend__repeat {
-    &::before {
-      background : @blue_bright;
-
-      left : .5em;
-    }
+    border-bottom : 3px dashed @blue;
   }
 
-  .resultGraphs--line__first, .resultGraphs--line__repeat {
+  .resultGraphs--line__first,
+  .resultGraphs--line__repeat,
+  .resultGraphs--line__firstWithoutTTFB,
+  .resultGraphs--line__repeatWithoutTTFB {
     stroke-width : 3;
   }
 
-  .resultGraphs--line__first {
+  .resultGraphs--line__first, .resultGraphs--line__firstWithoutTTFB {
     fill : none;
+
+  }
+
+  .resultGraphs--line__first {
+    stroke : @blue;
+
+  }
+
+  .resultGraphs--line__firstWithoutTTFB {
+    stroke : @blue_bright;
+  }
+
+  .resultGraphs--line__repeat,
+  .resultGraphs--line__repeatWithoutTTFB {
+    fill : none;
+
+    stroke-dasharray : 5, 5;
+  }
+
+
+  .resultGraphs--line__repeat {
     stroke : @blue;
   }
 
-  .resultGraphs--line__repeat {
-    fill : none;
+  .resultGraphs--line__repeatWithoutTTFB {
     stroke : @blue_bright;
   }
 

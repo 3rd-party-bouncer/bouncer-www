@@ -3,6 +3,7 @@
 // Require the needed packages
 var concat        = require( 'gulp-concat' ),
     csslint       = require( 'gulp-csslint' ),
+    eslint        = require( 'gulp-eslint' ),
     gulp          = require( 'gulp' ),
     jshint        = require( 'gulp-jshint' ),
     jshintStylish = require( 'jshint-stylish' ),
@@ -75,6 +76,7 @@ gulp.task( 'styles', function () {
  */
 gulp.task( 'scripts', function() {
   return gulp.src( files.scripts )
+    .pipe( eslint() )
     .pipe( concat( 'results.js' ) )
     .pipe( uglify() )
     .pipe( gulp.dest( 'public' ) );

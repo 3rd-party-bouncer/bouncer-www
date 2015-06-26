@@ -50,6 +50,7 @@
     "whatwg-fetch": "^0.9.0"
   },
   "devDependencies": {
+    "gulp-eslint": "^0.14.0",
     "nodemon": "^1.2.1"
   }
 }
