@@ -291,10 +291,12 @@
           renderTable( '#resultTable--allVsNone', allVsNoneData );
           renderGraphs( '#resultGraphs--allVsNone', allVsNoneData );
 
-          var noneVsEachData = result.data.slice( 1 );
+          if ( result.data[ 1 ] ) {
+            var noneVsEachData = result.data.slice( 1 );
 
-          renderTable( '#resultTable--noneVsEach', noneVsEachData );
-          renderGraphs( '#resultGraphs--noneVsEach', noneVsEachData );
+            renderTable( '#resultTable--noneVsEach', noneVsEachData );
+            renderGraphs( '#resultGraphs--noneVsEach', noneVsEachData );
+          }
         }
 
         if ( ! result.finished ) {
