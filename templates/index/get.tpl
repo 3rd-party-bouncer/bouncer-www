@@ -11,7 +11,7 @@
     <label class="form--label">
       <div>List of 3rd party domains you want/have to include</div>
       <small>comma seperated</small>
-      <textarea name="allowedDomains" placeholder="cdn.lorem.com,cdn.ipsum.net" id="" cols="30" rows="10" required></textarea>
+      <textarea name="allowedDomains" placeholder="cdn.lorem.com,cdn.ipsum.net" id="" cols="30" rows="10"></textarea>
     </label>
     <label class="form--label">
       <div>Number of WebpageTest runs per 3rd party evaluation : 3</div>
