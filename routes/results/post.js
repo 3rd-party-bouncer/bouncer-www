@@ -30,6 +30,11 @@ module.exports = {
     }, function( err, result ) {
       var savedDoc = result.ops[ 0 ];
       // kick off bouncer
+
+      app.get( 'logger' ).bouncerApp(
+        'Calling Bouncer with options:' + JSON.stringify( options )
+      );
+
       bouncers[ savedDoc._id ] = new Bouncer( options );
       bouncers[ savedDoc._id ].runner.on( 'bouncer:data', function( runData ) {
         var log  = app.get( 'logger' ).couch;
@@ -51,6 +56,10 @@ module.exports = {
 
           app.get( 'logger' ).mongo( 'Saved bouncer run' );
         } );
+      } );
+
+      bouncers[ savedDoc._id ].runner.on( 'bouncer:debug', function( msg ) {
+        app.get( 'logger' ).bouncer( msg );
       } );
 
       bouncers[ savedDoc._id ].runner.on( 'bouncer:error', function( error ) {
