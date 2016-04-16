@@ -13,7 +13,7 @@ module.exports = {
   },
   bouncer: {
     apiKey   : process.env.API_KEY,
-    location : process.env.LOCATION || '',
+    location : process.env.LOCATION || 'eu-central-1',
     server   : process.env.SERVER
   }
 };
